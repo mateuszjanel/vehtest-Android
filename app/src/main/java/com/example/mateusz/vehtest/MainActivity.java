@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.github.anastr.speedviewlib.AwesomeSpeedometer;
 
@@ -41,17 +43,21 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //screen turning off block
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        LocationManager locationManager = (LocationManager) this.getSystemService(getApplicationContext().LOCATION_SERVICE);
-
+        final LocationManager locationManager = (LocationManager) this.getSystemService(getApplicationContext().LOCATION_SERVICE);
+        final String locationProvider = LocationManager.GPS_PROVIDER;
 
         final AwesomeSpeedometer speedometer = findViewById(R.id.awesomeSpeedometer);
         speedometer.speedTo(0);
@@ -60,7 +66,6 @@ public class MainActivity extends AppCompatActivity
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-
             } else {
                 // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(this,
@@ -71,13 +76,20 @@ public class MainActivity extends AppCompatActivity
         }
         else {
 
-            LocationListener locationListener = new LocationListener() {
+            final LocationListener locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
                     // Called when a new location is found by the network location provider.
-                    speedometer.speedTo(location.getSpeed());
+                    speedometer.speedTo(location.getSpeed()*3.6f);
                 }
 
                 public void onStatusChanged(String provider, int status, Bundle extras) {
+                    /*if(status == LocationProvider.TEMPORARILY_UNAVAILABLE)
+                    {
+                        locationManager.removeUpdates(this);
+                    }
+                    else {
+                        locationManager.requestLocationUpdates(locationProvider, 0, 0, this);
+                    }*/ //removing updates when gps signal is poor in order to prevent from false speed
                 }
 
                 public void onProviderEnabled(String provider) {
@@ -87,7 +99,7 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
-            String locationProvider = LocationManager.GPS_PROVIDER;
+
             locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
         }
     }
