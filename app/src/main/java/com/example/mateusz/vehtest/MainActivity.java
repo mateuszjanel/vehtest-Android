@@ -1,16 +1,22 @@
 package com.example.mateusz.vehtest;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,18 +29,23 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.github.anastr.speedviewlib.AwesomeSpeedometer;
+import com.github.anastr.speedviewlib.TubeSpeedometer;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener {
 
+    SensorManager sensorManager;
+    Sensor accelerationSensor;
+
+    @SuppressLint("ServiceCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,7 +55,7 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -53,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         //screen turning off block
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         final LocationManager locationManager = (LocationManager) this.getSystemService(getApplicationContext().LOCATION_SERVICE);
@@ -61,13 +72,21 @@ public class MainActivity extends AppCompatActivity
 
         final AwesomeSpeedometer speedometer = findViewById(R.id.awesomeSpeedometer);
         speedometer.speedTo(0);
+        AwesomeSpeedometer imageSpeedometer = findViewById(R.id.imageSpeedometer);
+        imageSpeedometer.speedPercentTo(50);
+
+        //Sensor: accelerometer
+
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        accelerationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
             } else {
-                // No explanation needed; request the permission
+                //Request the permission
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         1);
@@ -89,7 +108,7 @@ public class MainActivity extends AppCompatActivity
                     }
                     else {
                         locationManager.requestLocationUpdates(locationProvider, 0, 0, this);
-                    }*/ //removing updates when gps signal is poor in order to prevent from false speed
+                    } //removing updates when gps signal is poor in order to prevent from false speed*/
                 }
 
                 public void onProviderEnabled(String provider) {
@@ -99,14 +118,28 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
-
-            locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+          locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
         }
+
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+                sensorManager.registerListener(this, accelerationSensor,SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -156,8 +189,22 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Sensor sensor = event.sensor;
+        AwesomeSpeedometer imageSpeedometer = findViewById(R.id.imageSpeedometer);
+        imageSpeedometer.speedTo(50 + event.values[2]*2, 100);
+        Log.e("Accelerometer", Float.toString(event.values[2]));
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
