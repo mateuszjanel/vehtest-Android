@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Vehtest</string>
     <string name="app_title">VehTest</string>
+    <string name="slide_menu_home">Tryb podglądu</string>
 </resources>

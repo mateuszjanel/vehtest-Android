@@ -2,21 +2,15 @@ package com.example.mateusz.vehtest;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,14 +22,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
-import com.github.anastr.speedviewlib.AwesomeSpeedometer;
-import com.github.anastr.speedviewlib.TubeSpeedometer;
+import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    SensorManager sensorManager;
-    Sensor accelerationSensor;
+
 
     @SuppressLint("ServiceCast")
     @Override
@@ -67,74 +60,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final LocationManager locationManager = (LocationManager) this.getSystemService(getApplicationContext().LOCATION_SERVICE);
-        final String locationProvider = LocationManager.GPS_PROVIDER;
-
-        final AwesomeSpeedometer speedometer = findViewById(R.id.awesomeSpeedometer);
-        speedometer.speedTo(0);
-        AwesomeSpeedometer imageSpeedometer = findViewById(R.id.imageSpeedometer);
-        imageSpeedometer.speedPercentTo(50);
-
-        //Sensor: accelerometer
-
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        accelerationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-            } else {
-                //Request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        1);
-
-            }
-        }
-        else {
-
-            final LocationListener locationListener = new LocationListener() {
-                public void onLocationChanged(Location location) {
-                    // Called when a new location is found by the network location provider.
-                    speedometer.speedTo(location.getSpeed()*3.6f);
-                }
-
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                    /*if(status == LocationProvider.TEMPORARILY_UNAVAILABLE)
-                    {
-                        locationManager.removeUpdates(this);
-                    }
-                    else {
-                        locationManager.requestLocationUpdates(locationProvider, 0, 0, this);
-                    } //removing updates when gps signal is poor in order to prevent from false speed*/
-                }
-
-                public void onProviderEnabled(String provider) {
-                }
-
-                public void onProviderDisabled(String provider) {
-                }
-            };
-
-          locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
-        }
-
-
+        setFragment(MainFragment.class, getString(R.string.slide_menu_home), R.id.nav_home);
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-                sensorManager.registerListener(this, accelerationSensor,SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -175,7 +112,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
@@ -194,17 +131,44 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        Sensor sensor = event.sensor;
-        AwesomeSpeedometer imageSpeedometer = findViewById(R.id.imageSpeedometer);
-        imageSpeedometer.speedTo(50 + event.values[2]*2, 100);
-        Log.e("Accelerometer", Float.toString(event.values[2]));
+    public void setFragmentWithBundle(Class fragmentClass, String title, int drawerHighlightItem, Bundle bundle) {
+        setFragment(fragmentClass, title, drawerHighlightItem, false, bundle);
+    }
+
+    public void setFragment(Class fragmentClass, String title, int drawerHighlightItem) {
+        setFragment(fragmentClass, title, drawerHighlightItem, false, null);
+    }
+
+    public void setFragment(Class fragmentClass, String title, int drawerHighlightItem, boolean dontAddToBackstack, Bundle bundle) {
+        Fragment fragment = null;
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (bundle != null)
+            Objects.requireNonNull(fragment).setArguments(bundle);
+
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.view_content, Objects.requireNonNull(fragment));
+        if (!dontAddToBackstack)
+            fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+        // Set action bar title
+        setTitle(title);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(drawerHighlightItem);
+        drawer.closeDrawer(GravityCompat.START);
 
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 }
