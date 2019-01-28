@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.mateusz.vehtest.TestFragment"
+    tools:showIn="@layout/app_bar_main">
+
+    <com.github.anastr.speedviewlib.AwesomeSpeedometer
+        android:id="@+id/awesomeSpeedometerTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/imageSpeedometerTest"
+        app:layout_constraintTop_toTopOf="parent"
+        app:sv_withTremble="false" />
+
+    <com.github.anastr.speedviewlib.AwesomeSpeedometer
+        android:id="@+id/imageSpeedometerTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/awesomeSpeedometerTest"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:sv_speedTextColor="@android:color/transparent"
+        app:sv_unitTextColor="@android:color/transparent"
+        app:sv_withTremble="false" />
+    <TextView
+        android:id="@+id/timerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0-100km/h"
+        android:textColor="@color/contentText"
+        android:textSize="18sp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/awesomeSpeedometerTest" />
+
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time"
+        android:textColor="@color/contentText"
+        android:textSize="24sp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timerName"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
