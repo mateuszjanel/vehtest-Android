@@ -27,7 +27,9 @@
         app:sv_withTremble="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textAppTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textAppTitle"
+        app:sv_speedometerColor="@color/colorPrimaryDark"
+        app:sv_trianglesColor="@color/speedometersTriangle" />
 
     <com.github.anastr.speedviewlib.AwesomeSpeedometer
         android:id="@+id/imageSpeedometer"
@@ -39,6 +41,10 @@
         app:layout_constraintTop_toBottomOf="@+id/awesomeSpeedometer"
         app:sv_speedTextColor="@android:color/transparent"
         app:sv_unitTextColor="@android:color/transparent"
-        app:sv_withTremble="false" />
+        app:sv_withTremble="false"
+        app:sv_speedometerMode="RIGHT"
+        app:sv_tickNumber="0"
+        app:sv_speedometerColor="@color/colorPrimaryDark"
+        app:sv_trianglesColor="@color/speedometersTriangle" />
 
 </android.support.constraint.ConstraintLayout>

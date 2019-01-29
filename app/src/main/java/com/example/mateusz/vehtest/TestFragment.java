@@ -35,6 +35,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
     TextView timerTextView;
     long startTime = 0;
     boolean timeMeasuringFlag = false;
+    boolean testFinished = false;
 
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -46,7 +47,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
             int minutes = seconds / 60;
             seconds = seconds % 60;
 
-            timerTextView.setText(String.format("%d:%02d", minutes, seconds));
+            timerTextView.setText(String.format("%d:%02d", seconds, millis%1000));
 
             timerHandler.postDelayed(this, 500);
         }
@@ -123,7 +124,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
 
                     //TODO: zamiana wyświetlania prędkości na start zegara
 
-                    if(location.getSpeed() > 0.0 && timeMeasuringFlag == false) {
+                    if(location.getSpeed() > 0.0 && timeMeasuringFlag == false && testFinished == false) {
 
                         //timerTextView.setText(String.valueOf(location.getSpeed()));
                         timeMeasuringFlag = true;
@@ -134,6 +135,24 @@ public class TestFragment extends Fragment implements SensorEventListener {
                     {
                         timeMeasuringFlag = false;
                         timerHandler.removeCallbacks(timerRunnable);
+                    }
+
+                    if (location.getSpeed() == 20) {
+
+                    }
+                    else if(location.getSpeed() == 50) {
+
+                    }
+                    else if(location.getSpeed() == 70){
+
+                    }
+                    else if(location.getSpeed() == 90){
+
+                    }
+                    else if(location.getSpeed() == 100){
+                        testFinished = true;
+                        timerHandler.removeCallbacks(timerRunnable);
+                        timeMeasuringFlag = false;
                     }
                 }
 
@@ -164,7 +183,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
         AwesomeSpeedometer imageSpeedometer = getActivity().findViewById(R.id.imageSpeedometerTest);
-        imageSpeedometer.speedTo(50 + event.values[2]*2, 100);
+        imageSpeedometer.speedTo(50 + event.values[2]*5, 100);
         Log.e("Accelerometer", Float.toString(event.values[2]));
     }
 

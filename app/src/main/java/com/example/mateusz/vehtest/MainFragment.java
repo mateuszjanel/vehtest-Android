@@ -126,7 +126,7 @@ public class MainFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
         AwesomeSpeedometer imageSpeedometer = getActivity().findViewById(R.id.imageSpeedometer);
-        imageSpeedometer.speedTo(50 + event.values[2]*2, 100);
+        imageSpeedometer.speedTo(50 + event.values[2]*5, 100);
         Log.e("Accelerometer", Float.toString(event.values[2]));
     }
 
