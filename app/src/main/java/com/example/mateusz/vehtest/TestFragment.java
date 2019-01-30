@@ -17,6 +17,8 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +31,7 @@ import com.github.anastr.speedviewlib.AwesomeSpeedometer;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Objects;
 
 
 public class TestFragment extends Fragment implements SensorEventListener {
@@ -99,8 +102,9 @@ public class TestFragment extends Fragment implements SensorEventListener {
 
             if (seconds > 0) {
                 //accelerationTextView.setText(String.valueOf((currentSpeed / seconds)) + " m/s²");
-                accelerationTextView.setText(String.format("%.2f m/s²", (currentSpeed / seconds)));
-                toBaseAcceleration = Float.parseFloat(accelerationTextView.getText().toString());
+                accelerationTextView.setText(String.format("%.2f m/s^2", (currentSpeed / seconds)));
+                //toBaseAcceleration = Float.parseFloat(accelerationTextView.getText().toString());
+                toBaseAcceleration =(float) (currentSpeed/seconds);
             }
 
             toBaseHundred = timerTextView.getText().toString();
@@ -195,6 +199,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
                         currentSpeed = location.getSpeed();
                         startTime = System.currentTimeMillis();
                         timerHandler.postDelayed(timerRunnable, 0);
+
                     } else if (location.getSpeed() == 0.0 && timeMeasuringFlagHundred == true) {
                         timeMeasuringFlagHundred = false;
                         timeMeasuringFlagTwenty = false;
@@ -251,8 +256,20 @@ public class TestFragment extends Fragment implements SensorEventListener {
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (testStarted) {
+                    if (true /*testStarted*/) {
+                        //long newRecordId = 12;
+                        SimpleDateFormat formatterS = new SimpleDateFormat("dd.MM.yyyy");//formating according to my need
+                        currentTest = new TestedVehicle(formatterS.format(Calendar.getInstance().getTime()), "---", "---", 0, "---", toBaseTwenty, toBaseFifty, toBaseSeventy, toBaseNinety, toBaseHundred, toBaseAcceleration);
                         long newRecordId = appDatabase.vehicleDao().insert(currentTest);
+                        Fragment fragment = new AdditionalTestInfoFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("idFromDB", newRecordId);
+                        fragment.setArguments(bundle);
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.view_content, Objects.requireNonNull(fragment));
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
                     }
                     else {
                         Toast.makeText(getActivity(), getActivity().getString(R.string.testNotExists), Toast.LENGTH_SHORT).show();

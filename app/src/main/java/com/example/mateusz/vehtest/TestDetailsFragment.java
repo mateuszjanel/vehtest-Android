@@ -72,7 +72,7 @@ public class TestDetailsFragment extends Fragment {
         testedVehicle = appDatabase.vehicleDao().getTestById(idFromDB);
 
         idInView = getActivity().findViewById(R.id.idText);
-        testDate = getActivity().findViewById(R.id.testDateText);
+        testDate = getActivity().findViewById(R.id.dateText);
         vehicleMark = getActivity().findViewById(R.id.carMarkText);
         engine = getActivity().findViewById(R.id.engineText);
         power = getActivity().findViewById(R.id.powerText);
@@ -86,7 +86,7 @@ public class TestDetailsFragment extends Fragment {
         deleteButton = (Button)getActivity().findViewById(R.id.delButton);
 
         idInView.setText(idFromDB.toString());
-//        testDate.setText(testedVehicle.getTestDate());
+        testDate.setText(testedVehicle.getTestDate());
         vehicleMark.setText(testedVehicle.getVehicleMark());
         engine.setText(testedVehicle.getVehicleEngine());
         power.setText(String.valueOf(testedVehicle.getVehiclePowerHP()));
