@@ -18,10 +18,12 @@
     <string name="carMarkName">Mark</string>
     <string name="engineName">Engine</string>
     <string name="powerName">Power [HP]</string>
-    <string name="madeDateName">Made date</string>
+    <string name="madeDateName">Year of manufacture</string>
     <string name="twentyName">0-20 kph</string>
     <string name="fiftyName">0-50 kph</string>
     <string name="seventyName">0-70 kph</string>
     <string name="ninetyName">0-90 kph</string>
     <string name="hundredName">0-100 kph</string>
+    <string name="delete_name">Delete</string>
+    <string name="testNotExists">Test not executed</string>
 </resources>

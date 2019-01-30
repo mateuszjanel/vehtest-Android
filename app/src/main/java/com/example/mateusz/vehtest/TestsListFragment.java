@@ -59,7 +59,7 @@ public class TestsListFragment extends Fragment {
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");//formating according to my need
-        TestedVehicle exampleTest = new TestedVehicle(formatter.format(Calendar.getInstance().getTime()), "Citroen C4", "1.6 HDI", 120, formatter.format(Calendar.getInstance().getTime()), 03.12f, 05.13f, 21.23f, 30.21f, 35.20f, 12.25f);
+        TestedVehicle exampleTest = new TestedVehicle(formatter.format(Calendar.getInstance().getTime()), "Citroen C4", "1.6 HDI", 120, formatter.format(Calendar.getInstance().getTime()), "03.12","04.12", "05.13", "21.23", "30.21", 35.20f);
         Context appContext = getActivity().getApplicationContext();
 
         appDatabase = Room.databaseBuilder(appContext, AppDatabase.class, AppDatabase.DATABASE_NAME).allowMainThreadQueries().build();

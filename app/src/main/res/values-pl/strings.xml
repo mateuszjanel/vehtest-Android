@@ -10,10 +10,12 @@
     <string name="carMarkName">Marka</string>
     <string name="engineName">Silnik</string>
     <string name="powerName">Moc [KM]</string>
-    <string name="madeDateName">Data produkcji</string>
+    <string name="madeDateName">Rok produkcji</string>
     <string name="twentyName">0-20 km/h</string>
     <string name="fiftyName">0-50 km/h</string>
     <string name="seventyName">0-70 km/h</string>
     <string name="ninetyName">0-90 km/h</string>
     <string name="hundredName">0-100 km/h</string>
+    <string name="delete_name">Usuń</string>
+    <string name="testNotExists">Nie przeprowadzono testu</string>
 </resources>

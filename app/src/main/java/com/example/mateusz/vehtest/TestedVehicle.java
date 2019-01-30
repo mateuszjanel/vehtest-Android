@@ -28,19 +28,19 @@ public class TestedVehicle {
     private String vehicleMadeDate;
 
     @ColumnInfo(name = "toTwenty")
-    private float vehicleToTwentyTime;
+    private String vehicleToTwentyTime;
 
     @ColumnInfo(name = "toFifty")
-    private float vehicleToFiftyTime;
+    private String vehicleToFiftyTime;
 
     @ColumnInfo(name = "toSeventy")
-    private float vehicleToSeventyTime;
+    private String vehicleToSeventyTime;
 
     @ColumnInfo(name = "toNinety")
-    private float vehicleToNinetyTime;
+    private String vehicleToNinetyTime;
 
     @ColumnInfo(name = "toHundred")
-    private float vehicleToHundredTime;
+    private String vehicleToHundredTime;
 
     @ColumnInfo(name = "averageAcceleration")
     private float vehicleAcceleration;
@@ -70,23 +70,23 @@ public class TestedVehicle {
         return vehicleMadeDate;
     }
 
-    public float getVehicleToTwentyTime() {
+    public String getVehicleToTwentyTime() {
         return vehicleToTwentyTime;
     }
 
-    public float getVehicleToFiftyTime() {
+    public String getVehicleToFiftyTime() {
         return vehicleToFiftyTime;
     }
 
-    public float getVehicleToSeventyTime() {
+    public String getVehicleToSeventyTime() {
         return vehicleToSeventyTime;
     }
 
-    public float getVehicleToNinetyTime() {
+    public String getVehicleToNinetyTime() {
         return vehicleToNinetyTime;
     }
 
-    public float getVehicleToHundredTime() {
+    public String getVehicleToHundredTime() {
         return vehicleToHundredTime;
     }
 
@@ -115,23 +115,23 @@ public class TestedVehicle {
         this.vehicleMadeDate = vehicleMadeDate;
     }
 
-    public void setVehicleToTwentyTime(float vehicleToTwentyTime) {
+    public void setVehicleToTwentyTime(String vehicleToTwentyTime) {
         this.vehicleToTwentyTime = vehicleToTwentyTime;
     }
 
-    public void setVehicleToFiftyTime(float vehicleToFiftyTime) {
+    public void setVehicleToFiftyTime(String vehicleToFiftyTime) {
         this.vehicleToFiftyTime = vehicleToFiftyTime;
     }
 
-    public void setVehicleToSeventyTime(float vehicleToSeventyTime) {
+    public void setVehicleToSeventyTime(String vehicleToSeventyTime) {
         this.vehicleToSeventyTime = vehicleToSeventyTime;
     }
 
-    public void setVehicleToNinetyTime(float vehicleToNinetyTime) {
+    public void setVehicleToNinetyTime(String vehicleToNinetyTime) {
         this.vehicleToNinetyTime = vehicleToNinetyTime;
     }
 
-    public void setVehicleToHundredTime(float vehicleToHundredTime) {
+    public void setVehicleToHundredTime(String vehicleToHundredTime) {
         this.vehicleToHundredTime = vehicleToHundredTime;
     }
 
@@ -141,7 +141,8 @@ public class TestedVehicle {
 
     //test constructor
 
-    public TestedVehicle(String testDate, String vehicleMark, String vehicleEngine, int vehiclePowerHP, String vehicleMadeDate, float vehicleToTwentyTime, float vehicleToFiftyTime, float vehicleToSeventyTime, float vehicleToNinetyTime, float vehicleToHundredTime, float vehicleAcceleration) {
+
+    public TestedVehicle(String testDate, String vehicleMark, String vehicleEngine, int vehiclePowerHP, String vehicleMadeDate, String vehicleToTwentyTime, String vehicleToFiftyTime, String vehicleToSeventyTime, String vehicleToNinetyTime, String vehicleToHundredTime, float vehicleAcceleration) {
         this.testDate = testDate;
         this.vehicleMark = vehicleMark;
         this.vehicleEngine = vehicleEngine;

@@ -1,6 +1,7 @@
 package com.example.mateusz.vehtest;
 
 import android.Manifest;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -13,6 +14,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.anastr.speedviewlib.AwesomeSpeedometer;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class TestFragment extends Fragment implements SensorEventListener {
@@ -38,6 +43,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
     TextView timerTextViewNinety;
     TextView accelerationTextView;
     long startTime = 0;
+    boolean testStarted = false;
     boolean timeMeasuringFlagTwenty = false;
     boolean timeMeasuringFlagFifty = false;
     boolean timeMeasuringFlagSeventy = false;
@@ -45,6 +51,13 @@ public class TestFragment extends Fragment implements SensorEventListener {
     boolean timeMeasuringFlagHundred = false;
     boolean testFinished = false;
     double currentSpeed = 0;
+
+    String toBaseTwenty = "0";
+    String toBaseFifty = "0";
+    String toBaseSeventy = "0";
+    String toBaseNinety = "0";
+    String toBaseHundred = "0";
+    float toBaseAcceleration = 0.0f;
 
     TestedVehicle currentTest;
 
@@ -60,27 +73,37 @@ public class TestFragment extends Fragment implements SensorEventListener {
 
             timerTextView.setText(String.format("%d:%02d", seconds, millis % 1000));
 
-            if(timeMeasuringFlagTwenty == true) {
+            if (timeMeasuringFlagTwenty == true) {
                 timerTextViewTwenty.setText(String.format("%d:%02d", seconds, millis % 1000));
+            } else {
+                toBaseTwenty = timerTextViewTwenty.getText().toString();
             }
 
-            if(timeMeasuringFlagFifty == true) {
+            if (timeMeasuringFlagFifty == true) {
                 timerTextViewFifty.setText(String.format("%d:%02d", seconds, millis % 1000));
+            } else {
+                toBaseFifty = timerTextViewFifty.getText().toString();
             }
 
-            if(timeMeasuringFlagSeventy == true) {
+            if (timeMeasuringFlagSeventy == true) {
                 timerTextViewSeventy.setText(String.format("%d:%02d", seconds, millis % 1000));
+            } else {
+                toBaseSeventy = timerTextViewSeventy.getText().toString();
             }
 
-            if(timeMeasuringFlagNinety == true) {
+            if (timeMeasuringFlagNinety == true) {
                 timerTextViewNinety.setText(String.format("%d:%02d", seconds, millis % 1000));
+            } else {
+                toBaseNinety = timerTextViewNinety.getText().toString();
             }
 
-            if(seconds>0) {
+            if (seconds > 0) {
                 //accelerationTextView.setText(String.valueOf((currentSpeed / seconds)) + " m/s²");
-                accelerationTextView.setText(String.format("%f.2 m/s²",(currentSpeed / seconds)));
+                accelerationTextView.setText(String.format("%.2f m/s²", (currentSpeed / seconds)));
+                toBaseAcceleration = Float.parseFloat(accelerationTextView.getText().toString());
             }
 
+            toBaseHundred = timerTextView.getText().toString();
             timerHandler.postDelayed(this, 500);
         }
     };
@@ -118,7 +141,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
         final LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().getApplicationContext().LOCATION_SERVICE);
         final String locationProvider = LocationManager.GPS_PROVIDER;
 
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)&& !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             Toast.makeText(getActivity(), getActivity().getString(R.string.gps_check_message), Toast.LENGTH_SHORT).show();
         }
 
@@ -153,20 +176,17 @@ public class TestFragment extends Fragment implements SensorEventListener {
             }
         } else {
 
+
             final LocationListener locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
                     // Called when a new location is found by the network location provider.
                     speedometer.speedTo(location.getSpeed() * 3.6f);
 
-                    float toBaseTwenty;
-                    float toBaseFifty;
-                    float toBaseSeventy;
-                    float toBaseNinety;
-                    float toBaseHundred;
 
                     if (location.getSpeed() > 0.0 && timeMeasuringFlagHundred == false && testFinished == false) {
 
                         //timerTextView.setText(String.valueOf(location.getSpeed()));
+                        testStarted = true;
                         timeMeasuringFlagHundred = true;
                         timeMeasuringFlagTwenty = true;
                         timeMeasuringFlagFifty = true;
@@ -181,6 +201,8 @@ public class TestFragment extends Fragment implements SensorEventListener {
                         timeMeasuringFlagFifty = false;
                         timeMeasuringFlagSeventy = false;
                         timeMeasuringFlagNinety = false;
+                        SimpleDateFormat formatterS = new SimpleDateFormat("dd.MM.yyyy");//formating according to my need
+                        currentTest = new TestedVehicle(formatterS.format(Calendar.getInstance().getTime()), "---", "---", 0, "---", toBaseTwenty, toBaseFifty, toBaseSeventy, toBaseNinety, toBaseHundred, toBaseAcceleration);
                         timerHandler.removeCallbacks(timerRunnable);
                     }
 
@@ -201,6 +223,8 @@ public class TestFragment extends Fragment implements SensorEventListener {
                         testFinished = true;
                         timerHandler.removeCallbacks(timerRunnable);
                         timeMeasuringFlagHundred = false;
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");//formating according to my need
+                        currentTest = new TestedVehicle(formatter.format(Calendar.getInstance().getTime()), "---", "---", 0, "---", toBaseTwenty, toBaseFifty, toBaseSeventy, toBaseNinety, toBaseHundred, toBaseAcceleration);
                     }
                 }
 
@@ -220,6 +244,22 @@ public class TestFragment extends Fragment implements SensorEventListener {
                 public void onProviderDisabled(String provider) {
                 }
             };
+
+            Context appContext = getActivity().getApplicationContext();
+            final AppDatabase appDatabase = Room.databaseBuilder(appContext, AppDatabase.class, AppDatabase.DATABASE_NAME).allowMainThreadQueries().build();
+            FloatingActionButton floatingActionButton = getActivity().findViewById(R.id.fabAddToDB);
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (testStarted) {
+                        long newRecordId = appDatabase.vehicleDao().insert(currentTest);
+                    }
+                    else {
+                        Toast.makeText(getActivity(), getActivity().getString(R.string.testNotExists), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
 
 
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -29,6 +30,7 @@ public class TestDetailsFragment extends Fragment {
     TextView ninety;
     TextView hundred;
     TextView accel;
+    Button deleteButton;
 
     public TestDetailsFragment() {
         // Required empty public constructor
@@ -81,6 +83,7 @@ public class TestDetailsFragment extends Fragment {
         ninety = getActivity().findViewById(R.id.ninetyText);
         hundred = getActivity().findViewById(R.id.hundredText);
         accel = getActivity().findViewById(R.id.accelerationText);
+        deleteButton = (Button)getActivity().findViewById(R.id.delButton);
 
         idInView.setText(idFromDB.toString());
 //        testDate.setText(testedVehicle.getTestDate());
@@ -88,12 +91,20 @@ public class TestDetailsFragment extends Fragment {
         engine.setText(testedVehicle.getVehicleEngine());
         power.setText(String.valueOf(testedVehicle.getVehiclePowerHP()));
         prodDate.setText(testedVehicle.getVehicleMadeDate());
-        twenty.setText(String.valueOf(testedVehicle.getVehicleToTwentyTime()));
-        fifty.setText(String.valueOf(testedVehicle.getVehicleToFiftyTime()));
-        seventy.setText(String.valueOf(testedVehicle.getVehicleToSeventyTime()));
-        ninety.setText(String.valueOf(testedVehicle.getVehicleToNinetyTime()));
-        hundred.setText(String.valueOf(testedVehicle.getVehicleToHundredTime()));
+        twenty.setText(testedVehicle.getVehicleToTwentyTime());
+        fifty.setText(testedVehicle.getVehicleToFiftyTime());
+        seventy.setText(testedVehicle.getVehicleToSeventyTime());
+        ninety.setText(testedVehicle.getVehicleToNinetyTime());
+        hundred.setText(testedVehicle.getVehicleToHundredTime());
         accel.setText(String.valueOf(testedVehicle.getVehicleAcceleration()));
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                appDatabase.vehicleDao().removeTest(idFromDB);
+                getActivity().onBackPressed();
+            }
+        });
+
 
     }
 }

@@ -26,7 +26,7 @@ public interface VehicleDao {
     void updateVehicleInfo(int ID, String tDate, String vehMark, String vehEngine, int vehPowerHP, String vehMadeDate);
 
     @Query("DELETE FROM TestedVehicle WHERE id = :ID")
-    void removeTest(int ID);
+    void removeTest(long ID);
 
     @Query("SELECT * FROM TestedVehicle")
     List<TestedVehicle> getTests();

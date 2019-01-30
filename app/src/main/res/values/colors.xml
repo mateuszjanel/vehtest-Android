@@ -6,4 +6,5 @@
     <color name="contentText">#000000</color>
     <color name="secondaryText">#2C2C2C</color>
     <color name="speedometersTriangle">#FFC107</color>
+    <color name="buttonTextColor">#FFFFFF</color>
 </resources>
