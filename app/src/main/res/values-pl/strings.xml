@@ -19,4 +19,5 @@
     <string name="delete_name">Usuń</string>
     <string name="testNotExists">Nie przeprowadzono testu</string>
     <string name="action_settings">O programie</string>
+    <string name="author_text">Autor: Mateusz Janel | janel.mateusz@gmail.com</string>
 </resources>

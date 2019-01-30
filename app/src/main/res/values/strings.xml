@@ -26,4 +26,5 @@
     <string name="hundredName">0-100 kph</string>
     <string name="delete_name">Delete</string>
     <string name="testNotExists">Test not executed</string>
+    <string name="author_text">Author: Mateusz Janel | janel.mateusz@gmail.com</string>
 </resources>

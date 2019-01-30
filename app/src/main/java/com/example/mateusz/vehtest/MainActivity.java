@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Class fragmenttoStart = AboutFragment.class;
+
+            setFragment(fragmenttoStart, getString(R.string.action_settings), 0);
             return true;
         }
 

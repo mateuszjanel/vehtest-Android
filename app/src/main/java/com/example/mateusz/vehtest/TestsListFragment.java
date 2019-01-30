@@ -59,7 +59,6 @@ public class TestsListFragment extends Fragment {
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");//formating according to my need
-        //TestedVehicle exampleTest = new TestedVehicle(formatter.format(Calendar.getInstance().getTime()), "Citroen C4 II", "1.6 HDI 115", 120, "2011", "3:534","12:423", "0", "0", "21:421", 1.1574f);
         Context appContext = getActivity().getApplicationContext();
 
         appDatabase = Room.databaseBuilder(appContext, AppDatabase.class, AppDatabase.DATABASE_NAME).allowMainThreadQueries().build();
