@@ -5,14 +5,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 
 public class TestsListFragment extends Fragment {
@@ -52,9 +58,8 @@ public class TestsListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
 
-
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");//formating according to my need
-        TestedVehicle exampleTest = new TestedVehicle(formatter.format(Calendar.getInstance().getTime()), "Citroen C4", "1.6 HDI", 120, formatter.format(Calendar.getInstance().getTime()), 03.12f, 05.13f, 21.23f, 30.21f, 35.20f, 12.25f );
+        TestedVehicle exampleTest = new TestedVehicle(formatter.format(Calendar.getInstance().getTime()), "Citroen C4", "1.6 HDI", 120, formatter.format(Calendar.getInstance().getTime()), 03.12f, 05.13f, 21.23f, 30.21f, 35.20f, 12.25f);
         Context appContext = getActivity().getApplicationContext();
 
         appDatabase = Room.databaseBuilder(appContext, AppDatabase.class, AppDatabase.DATABASE_NAME).allowMainThreadQueries().build();
@@ -64,10 +69,27 @@ public class TestsListFragment extends Fragment {
         adapter = new TestListAdapter(getActivity(), R.layout.list_item, R.id.plusImage, arrayOfTestedVehicles);
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.v("ListFragment", "Klik");
+                Fragment fragment = new TestDetailsFragment();
+                long dbId = arrayOfTestedVehicles.get(position).getId();
+                Bundle bundle = new Bundle();
+                bundle.putLong("idFromDB", dbId);
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.view_content, Objects.requireNonNull(fragment));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
 
 
-
+            }
+        });
 
 
     }
+
 }

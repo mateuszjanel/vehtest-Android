@@ -31,6 +31,9 @@ public interface VehicleDao {
     @Query("SELECT * FROM TestedVehicle")
     List<TestedVehicle> getTests();
 
+    @Query("SELECT * FROM TestedVehicle WHERE id = :ID")
+    TestedVehicle getTestById (long ID);
+
     @Query("SELECT * FROM TestedVehicle WHERE vehicleMark LIKE :vehMark")
     List<TestedVehicle> getTestsByVehicleMark(String vehMark);
 
