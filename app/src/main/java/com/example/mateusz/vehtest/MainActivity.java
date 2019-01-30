@@ -1,10 +1,6 @@
 package com.example.mateusz.vehtest;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,7 +23,6 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
 
 
     @SuppressLint("ServiceCast")
@@ -119,7 +114,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_test) {
             fragmentClass = TestFragment.class;
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_test_list) {
+            fragmentClass = TestsListFragment.class;
 
         } else if (id == R.id.nav_manage) {
 
@@ -151,6 +147,11 @@ public class MainActivity extends AppCompatActivity
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (fragmentClass == TestsListFragment.class)
+        {
+            fragment = new TestsListFragment();
         }
 
         if (bundle != null)

@@ -10,10 +10,8 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -33,8 +31,16 @@ public class TestFragment extends Fragment implements SensorEventListener {
     Sensor accelerationSensor;
 
     TextView timerTextView;
+    TextView timerTextViewTwenty;
+    TextView timerTextViewFifty;
+    TextView timerTextViewSeventy;
+    TextView timerTextViewNinety;
     long startTime = 0;
-    boolean timeMeasuringFlag = false;
+    boolean timeMeasuringFlagTwenty = false;
+    boolean timeMeasuringFlagFifty = false;
+    boolean timeMeasuringFlagSeventy = false;
+    boolean timeMeasuringFlagNinety = false;
+    boolean timeMeasuringFlagHundred = false;
     boolean testFinished = false;
 
     Handler timerHandler = new Handler();
@@ -47,7 +53,23 @@ public class TestFragment extends Fragment implements SensorEventListener {
             int minutes = seconds / 60;
             seconds = seconds % 60;
 
-            timerTextView.setText(String.format("%d:%02d", seconds, millis%1000));
+            timerTextView.setText(String.format("%d:%02d", seconds, millis % 1000));
+
+            if(timeMeasuringFlagTwenty == true) {
+                timerTextViewTwenty.setText(String.format("%d:%02d", seconds, millis % 1000));
+            }
+
+            if(timeMeasuringFlagFifty == true) {
+                timerTextViewFifty.setText(String.format("%d:%02d", seconds, millis % 1000));
+            }
+
+            if(timeMeasuringFlagSeventy == true) {
+                timerTextViewSeventy.setText(String.format("%d:%02d", seconds, millis % 1000));
+            }
+
+            if(timeMeasuringFlagNinety == true) {
+                timerTextViewNinety.setText(String.format("%d:%02d", seconds, millis % 1000));
+            }
 
             timerHandler.postDelayed(this, 500);
         }
@@ -86,7 +108,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
         final LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().getApplicationContext().LOCATION_SERVICE);
         final String locationProvider = LocationManager.GPS_PROVIDER;
 
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )){
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Toast.makeText(getActivity(), getActivity().getString(R.string.gps_check_message), Toast.LENGTH_SHORT).show();
         }
 
@@ -97,10 +119,14 @@ public class TestFragment extends Fragment implements SensorEventListener {
 
         //Sensor: accelerometer
 
-        sensorManager = (SensorManager)getActivity().getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         timerTextView = (TextView) getActivity().findViewById(R.id.timerTextView);
+        timerTextViewTwenty = (TextView) getActivity().findViewById(R.id.timertwentyTextView);
+        timerTextViewFifty = (TextView) getActivity().findViewById(R.id.timerfiftyTextView);
+        timerTextViewSeventy = (TextView) getActivity().findViewById(R.id.timerseventyTextView);
+        timerTextViewNinety = (TextView) getActivity().findViewById(R.id.timerninetyTextView);
 
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -114,45 +140,49 @@ public class TestFragment extends Fragment implements SensorEventListener {
                         1);
 
             }
-        }
-        else {
+        } else {
 
             final LocationListener locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
                     // Called when a new location is found by the network location provider.
-                    speedometer.speedTo(location.getSpeed()*3.6f);
+                    speedometer.speedTo(location.getSpeed() * 3.6f);
 
-                    //TODO: zamiana wyświetlania prędkości na start zegara
-
-                    if(location.getSpeed() > 0.0 && timeMeasuringFlag == false && testFinished == false) {
+                    if (location.getSpeed() > 0.0 && timeMeasuringFlagHundred == false && testFinished == false) {
 
                         //timerTextView.setText(String.valueOf(location.getSpeed()));
-                        timeMeasuringFlag = true;
+                        timeMeasuringFlagHundred = true;
+                        timeMeasuringFlagTwenty = true;
+                        timeMeasuringFlagFifty = true;
+                        timeMeasuringFlagSeventy = true;
+                        timeMeasuringFlagNinety = true;
                         startTime = System.currentTimeMillis();
                         timerHandler.postDelayed(timerRunnable, 0);
-                    }
-                    else if(location.getSpeed() == 0.0 && timeMeasuringFlag == true)
-                    {
-                        timeMeasuringFlag = false;
+                    } else if (location.getSpeed() == 0.0 && timeMeasuringFlagHundred == true) {
+                        timeMeasuringFlagHundred = false;
+                        timeMeasuringFlagTwenty = false;
+                        timeMeasuringFlagFifty = false;
+                        timeMeasuringFlagSeventy = false;
+                        timeMeasuringFlagNinety = false;
                         timerHandler.removeCallbacks(timerRunnable);
                     }
 
                     if (location.getSpeed() == 20) {
 
-                    }
-                    else if(location.getSpeed() == 50) {
+                        timeMeasuringFlagTwenty = false;
 
-                    }
-                    else if(location.getSpeed() == 70){
+                    } else if (location.getSpeed() == 50) {
+                        timeMeasuringFlagFifty = false;
 
-                    }
-                    else if(location.getSpeed() == 90){
+                    } else if (location.getSpeed() == 70) {
+                        timeMeasuringFlagSeventy = false;
 
-                    }
-                    else if(location.getSpeed() == 100){
+                    } else if (location.getSpeed() == 90) {
+                        timeMeasuringFlagNinety = false;
+
+                    } else if (location.getSpeed() == 100) {
                         testFinished = true;
                         timerHandler.removeCallbacks(timerRunnable);
-                        timeMeasuringFlag = false;
+                        timeMeasuringFlagHundred = false;
                     }
                 }
 
@@ -183,7 +213,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
         AwesomeSpeedometer imageSpeedometer = getActivity().findViewById(R.id.imageSpeedometerTest);
-        imageSpeedometer.speedTo(50 + event.values[2]*5, 100);
+        imageSpeedometer.speedTo(50 + event.values[2] * 5, 100);
         Log.e("Accelerometer", Float.toString(event.values[2]));
     }
 
