@@ -66,7 +66,7 @@ public class MainFragment extends Fragment implements SensorEventListener {
         final LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().getApplicationContext().LOCATION_SERVICE);
         final String locationProvider = LocationManager.GPS_PROVIDER;
 
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )){
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
             Toast.makeText(getActivity(), getActivity().getString(R.string.gps_check_message), Toast.LENGTH_SHORT).show();
         }
 
@@ -118,6 +118,7 @@ public class MainFragment extends Fragment implements SensorEventListener {
                 }
             };
 
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
         }
     }

@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -35,6 +36,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
     TextView timerTextViewFifty;
     TextView timerTextViewSeventy;
     TextView timerTextViewNinety;
+    TextView accelerationTextView;
     long startTime = 0;
     boolean timeMeasuringFlagTwenty = false;
     boolean timeMeasuringFlagFifty = false;
@@ -42,6 +44,9 @@ public class TestFragment extends Fragment implements SensorEventListener {
     boolean timeMeasuringFlagNinety = false;
     boolean timeMeasuringFlagHundred = false;
     boolean testFinished = false;
+    double currentSpeed = 0;
+
+    TestedVehicle currentTest;
 
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -69,6 +74,11 @@ public class TestFragment extends Fragment implements SensorEventListener {
 
             if(timeMeasuringFlagNinety == true) {
                 timerTextViewNinety.setText(String.format("%d:%02d", seconds, millis % 1000));
+            }
+
+            if(seconds>0) {
+                //accelerationTextView.setText(String.valueOf((currentSpeed / seconds)) + " m/s²");
+                accelerationTextView.setText(String.format("%f.2 m/s²",(currentSpeed / seconds)));
             }
 
             timerHandler.postDelayed(this, 500);
@@ -108,7 +118,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
         final LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().getApplicationContext().LOCATION_SERVICE);
         final String locationProvider = LocationManager.GPS_PROVIDER;
 
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)&& !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             Toast.makeText(getActivity(), getActivity().getString(R.string.gps_check_message), Toast.LENGTH_SHORT).show();
         }
 
@@ -127,6 +137,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
         timerTextViewFifty = (TextView) getActivity().findViewById(R.id.timerfiftyTextView);
         timerTextViewSeventy = (TextView) getActivity().findViewById(R.id.timerseventyTextView);
         timerTextViewNinety = (TextView) getActivity().findViewById(R.id.timerninetyTextView);
+        accelerationTextView = (TextView) getActivity().findViewById(R.id.accelerationTextView);
 
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -147,6 +158,12 @@ public class TestFragment extends Fragment implements SensorEventListener {
                     // Called when a new location is found by the network location provider.
                     speedometer.speedTo(location.getSpeed() * 3.6f);
 
+                    float toBaseTwenty;
+                    float toBaseFifty;
+                    float toBaseSeventy;
+                    float toBaseNinety;
+                    float toBaseHundred;
+
                     if (location.getSpeed() > 0.0 && timeMeasuringFlagHundred == false && testFinished == false) {
 
                         //timerTextView.setText(String.valueOf(location.getSpeed()));
@@ -155,6 +172,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
                         timeMeasuringFlagFifty = true;
                         timeMeasuringFlagSeventy = true;
                         timeMeasuringFlagNinety = true;
+                        currentSpeed = location.getSpeed();
                         startTime = System.currentTimeMillis();
                         timerHandler.postDelayed(timerRunnable, 0);
                     } else if (location.getSpeed() == 0.0 && timeMeasuringFlagHundred == true) {
@@ -203,6 +221,8 @@ public class TestFragment extends Fragment implements SensorEventListener {
                 }
             };
 
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
         }
 

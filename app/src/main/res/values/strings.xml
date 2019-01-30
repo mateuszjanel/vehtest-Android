@@ -12,7 +12,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="slide_menu_home">View mode</string>
     <string name="slide_menu_test">Test mode</string>
-    <string name="gps_check_message">GPS is unable.</string>
+    <string name="gps_check_message">Location is unavailable. Please turn it on.</string>
     <string name="test_acceleration">Acceleration</string>
     <string name="test_list">Tests list</string>
     <string name="carMarkName">Mark</string>

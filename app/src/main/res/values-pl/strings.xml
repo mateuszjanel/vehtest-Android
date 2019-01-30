@@ -4,7 +4,7 @@
     <string name="app_title">VehTest</string>
     <string name="slide_menu_home">Tryb podglądu</string>
     <string name="slide_menu_test">Tryb testu</string>
-    <string name="gps_check_message">GPS niedostępny.</string>
+    <string name="gps_check_message">Localizacja jest niedostępna. Proszę włączyć lokalizację.</string>
     <string name="test_acceleration">Przyspieszenie</string>
     <string name="test_list">Lista testów</string>
     <string name="carMarkName">Marka</string>

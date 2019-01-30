@@ -72,15 +72,28 @@ public class TestDetailsFragment extends Fragment {
         idInView = getActivity().findViewById(R.id.idText);
         testDate = getActivity().findViewById(R.id.testDateText);
         vehicleMark = getActivity().findViewById(R.id.carMarkText);
-       engine = getActivity().findViewById(R.id.engineText);
+        engine = getActivity().findViewById(R.id.engineText);
         power = getActivity().findViewById(R.id.powerText);
         prodDate = getActivity().findViewById(R.id.madeDateText);
         twenty = getActivity().findViewById(R.id.twentyText);
         fifty = getActivity().findViewById(R.id.fiftyText);
         seventy = getActivity().findViewById(R.id.seventyText);
-        ninety = getActivity().findViewById(R.id.ninetyName);
+        ninety = getActivity().findViewById(R.id.ninetyText);
         hundred = getActivity().findViewById(R.id.hundredText);
         accel = getActivity().findViewById(R.id.accelerationText);
+
+        idInView.setText(idFromDB.toString());
+//        testDate.setText(testedVehicle.getTestDate());
+        vehicleMark.setText(testedVehicle.getVehicleMark());
+        engine.setText(testedVehicle.getVehicleEngine());
+        power.setText(String.valueOf(testedVehicle.getVehiclePowerHP()));
+        prodDate.setText(testedVehicle.getVehicleMadeDate());
+        twenty.setText(String.valueOf(testedVehicle.getVehicleToTwentyTime()));
+        fifty.setText(String.valueOf(testedVehicle.getVehicleToFiftyTime()));
+        seventy.setText(String.valueOf(testedVehicle.getVehicleToSeventyTime()));
+        ninety.setText(String.valueOf(testedVehicle.getVehicleToNinetyTime()));
+        hundred.setText(String.valueOf(testedVehicle.getVehicleToHundredTime()));
+        accel.setText(String.valueOf(testedVehicle.getVehicleAcceleration()));
 
     }
 }
