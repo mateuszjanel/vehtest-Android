@@ -102,7 +102,7 @@ public class TestFragment extends Fragment implements SensorEventListener {
 
             if (seconds > 0) {
                 //accelerationTextView.setText(String.valueOf((currentSpeed / seconds)) + " m/s²");
-                accelerationTextView.setText(String.format("%.2f m/s^2", (currentSpeed / seconds)));
+                accelerationTextView.setText(String.format("%.2f m/s²", (currentSpeed/3.6f/seconds)));
                 //toBaseAcceleration = Float.parseFloat(accelerationTextView.getText().toString());
                 toBaseAcceleration =(float) (currentSpeed/seconds);
             }

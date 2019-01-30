@@ -5,7 +5,7 @@
     <string name="nav_header_title" translatable="false">VehTest App</string>
     <string name="nav_header_subtitle" translatable="false">ver. 1.0</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">About</string>
     <string name="app_title">VehTest</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -13,7 +13,7 @@
     <string name="slide_menu_home">View mode</string>
     <string name="slide_menu_test">Test mode</string>
     <string name="gps_check_message">Location is unavailable. Please turn it on.</string>
-    <string name="test_acceleration">Acceleration</string>
+    <string name="test_acceleration">Acceleration [m/s²]</string>
     <string name="test_list">Tests list</string>
     <string name="carMarkName">Mark</string>
     <string name="engineName">Engine</string>
