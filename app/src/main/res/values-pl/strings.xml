@@ -7,4 +7,13 @@
     <string name="gps_check_message">GPS niedostępny.</string>
     <string name="test_acceleration">Przyspieszenie</string>
     <string name="test_list">Lista testów</string>
+    <string name="carMarkName">Marka</string>
+    <string name="engineName">Silnik</string>
+    <string name="powerName">Moc [KM]</string>
+    <string name="madeDateName">Data produkcji</string>
+    <string name="twentyName">0-20 km/h</string>
+    <string name="fiftyName">0-50 km/h</string>
+    <string name="seventyName">0-70 km/h</string>
+    <string name="ninetyName">0-90 km/h</string>
+    <string name="hundredName">0-100 km/h</string>
 </resources>
